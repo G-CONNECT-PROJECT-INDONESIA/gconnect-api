@@ -2,8 +2,7 @@ const mongoose = require('mongoose')
 require('dotenv').config()
 
 const mongooseConnect = () => {
-    mongoose.connect(process.env.MONGODB_URI, {
-        useMongoClient: true,
+    mongoose.connect(process.env.MONGO_URI, {
     })
 }
 
@@ -20,6 +19,9 @@ mongoose.connection.on('disconnected', function() {
   setTimeout(mongooseConnect, 10240)
 })
 
+mongoose.connection.on('connected', function() {
+    console.log('Mongoose connection is established')
+})
 
 // connect to local mongodb by default if it not specified in env
 mongooseConnect()

@@ -5,11 +5,13 @@ const app         = Router()
 
 /* get home url */
 app.get('/', function(req, res, next) {
+  response = {
+    status: 'success',
+    message: 'Welcome to ' + product + ' v' + version,
+  }
+  console.log(response)
   res.status(200)
-    .json({
-        status: 'success',
-        message: 'Welcome to ' + product + ' v' + version,
-    })
+    .json(response)
 })
 
 module.exports = app

@@ -1,12 +1,12 @@
 const express = require('express')
-// const mongoose = require('./middleware/mongoose')
+const mongoose = require('./middlewares/mongoose')
 const bodyParser = require('body-parser')
 require('dotenv').config()
 
 const app = express();
 
 // Mongoose middleware
-// app.use(mongoose.checkState)
+app.use(mongoose.checkState)
 
 // Bodyparser middleware
 app.use(bodyParser.json())
@@ -21,13 +21,13 @@ const apiVersion = process.env.API_VERSION
 
 // Import routes
 const index = require('./routes/index')
+const sensornode = require('./routes/sensornode')
 // const sensordata = require('./routes/sensordata')
-// const nodes = require('./routes/nodes')
 
 // Routes
 app.use('/' + apiVersion, index)  // this is the default route for greeting
-// app.use('/' + apiVersion + sensordata, require('./routes/sensordata'))
-// app.use('/' + apiVersion + '/nodes', require('./routes/nodes'))
+app.use('/' + apiVersion + '/sensornode', sensornode)
+// app.use('/' + apiVersion + sensordata, sensordata)
 
 // Catch 404 and forward to error handler
 app.use(function(req, res, next) {

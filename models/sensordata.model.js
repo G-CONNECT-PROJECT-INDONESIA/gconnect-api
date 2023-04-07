@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const Node = require('./node.model')
+const SensorNode = require('./sensornode.model')
 
 const SensorDataSchema = new mongoose.Schema({
   id: {
@@ -10,7 +10,7 @@ const SensorDataSchema = new mongoose.Schema({
   nodeID: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: Node,
+    ref: SensorNode,
   },
   temperature: {
     type: Number,
