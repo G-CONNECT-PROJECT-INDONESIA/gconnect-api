@@ -68,3 +68,7 @@ var server = app.listen(app.get('port'), function() {
 
 // prevent too long threshold
 server.timeout = 2048
+
+// MQTT Sub
+const MqttClient = require('./mqtt-client/client')
+MqttClient()

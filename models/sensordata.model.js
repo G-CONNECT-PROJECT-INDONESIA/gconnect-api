@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const SensorNode = require('./sensornode.model')
 
 const SensorDataSchema = new mongoose.Schema({
-  id: {
+  dataId: {
     type: String,
     required: true,
     unique: true,
