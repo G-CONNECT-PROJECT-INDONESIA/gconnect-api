@@ -9,16 +9,16 @@ router.get('/', sensorNodeController.getAllSensorNodes)
 // Get sensor node by id
 router.get('/:id', sensorNodeController.getSensorNodeById)
 
-// Get sensor node that active status
-// router.get('/status/active', sensorNodeController.getSensorNodeByActiveStatus)
+// Get sensor node by name
+router.get('/name/:name', sensorNodeController.getSensorNodeByName)
 
 // Create new sensor node
 router.post('/', sensorNodeController.createSensorNode)
 
 // // Update sensor node by id
-// router.put('/:id', sensorNodeController.updateSensorNodeById)
+router.put('/:id', sensorNodeController.updateSensorNodeById)
 
 // // Delete sensor node by id
-// router.delete('/:id', sensorNodeController.deleteSensorNodeById)
+router.delete('/:id', sensorNodeController.deleteSensorNodeById)
 
 module.exports = router

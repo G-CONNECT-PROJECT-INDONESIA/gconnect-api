@@ -1,56 +1,77 @@
-const mongoose = require('mongoose')
-const SensorNode = require('./sensornode.model')
+const sensorDataModel = (sequelize, Sequelize) => {
+  const SensorData = sequelize.define('sensordata', {
+    dataId: {
+      type: Sequelize.STRING,
+      primaryKey: true,
+      allowNull: false,
+      unique: true,
+    },
+    nodeId: {
+      type: Sequelize.STRING,
+      foreignKey: true,
+      allowNull: false,
+    },
+    temperature: {
+      type: Sequelize.DOUBLE,
+      allowNull: true,
+    },
+    humidity: {
+      type: Sequelize.DOUBLE,
+      allowNull: true,
+    },
+    windspeed: {
+      type: Sequelize.DOUBLE,
+      allowNull: true,
+    },
+    rainfall: {
+      type: Sequelize.DOUBLE,
+      allowNull: true,
+    },
+    latitude: {
+      type: Sequelize.DECIMAL(18,15),
+      allowNull: true,
+      validate: {
+        min: -90,
+        max: 90,
+      },
+    },
+    longitude: {
+      type: Sequelize.DECIMAL(18,15),
+      allowNull: true,
+      validate: {
+        min: -180,
+        max: 180,
+      },
+    },
+    imuRoll: {
+      type: Sequelize.DOUBLE,
+      allowNull: true,
+    },
+    imuPitch: {
+      type: Sequelize.DOUBLE,
+      allowNull: true,
+    },
+    batteryStatus: {
+      type: Sequelize.INTEGER,
+      allowNull: true,
+    },
+    dangerStatus: {
+      type: Sequelize.INTEGER,
+      allowNull: true,
+    },
+    createdAt: {
+      type: Sequelize.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.NOW,
+    },
+    updatedAt: {
+      type: Sequelize.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.NOW,
+    },
+  })
 
-const SensorDataSchema = new mongoose.Schema({
-  dataId: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  nodeID: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: SensorNode,
-  },
-  temperature: {
-    type: Number,
-  },
-  humidity: {
-    type: Number,
-  },
-  windSpeed: {
-    type: Number,
-  },
-  rainfall: {
-    type: Number,
-    default: 0,
-  },
-  tiltX: {
-    type: Number,
-  },
-  tiltY: {
-    type: Number,
-  },
-  motionAx: {
-    type: Number,
-  },
-  motionAy: {
-    type: Number,
-  },
-  motionAz: {
-    type: Number,
-  },
-  createdAt: {
-    type: Date,
-    required: true,
-    default: Date.now,
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now,
-  },
-})
+  return SensorData
+}
 
-const SensorData = mongoose.model('SensorData', SensorDataSchema)
-
-module.exports = SensorData
+module.exports = sensorDataModel

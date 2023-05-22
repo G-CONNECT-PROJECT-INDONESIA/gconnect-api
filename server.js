@@ -1,16 +1,32 @@
 const express = require('express')
-const mongoose = require('./middlewares/mongoose')
 const bodyParser = require('body-parser')
 require('dotenv').config()
 
 const app = express();
 
-// Mongoose middleware
-app.use(mongoose.checkState)
+// Database
+const db = require('./config/db.config')
+
+db.sequelize.sync({ force: false }).then(() => {
+  console.log('Drop and Resync with { force: true }')
+})
+
+db.sequelize
+  .authenticate()
+  .then(() => {
+    console.log('Connection has been established successfully.')
+  })
+  .catch(err => {
+    console.error('Unable to connect to the database:', err)
+  })
 
 // Bodyparser middleware
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: true }))
+
+// MQTT client
+const mqttClient = require('./mqtt/mqtt_sub')
+// mqttClient()
 
 // Port
 const port = process.env.PORT || 5000
@@ -20,19 +36,16 @@ app.set('port', port)
 const apiVersion = process.env.API_VERSION
 
 // Import routes
-const index = require('./routes/index')
-const sensornode = require('./routes/sensornode')
-// const sensordata = require('./routes/sensordata')
+const route = require('./routes/route')
 
 // Routes
-app.use('/' + apiVersion, index)  // this is the default route for greeting
-app.use('/' + apiVersion + '/sensornode', sensornode)
-// app.use('/' + apiVersion + sensordata, sensordata)
+app.use('/' + apiVersion, route)
 
 // Catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found')
   err.status = 404
+  console.error(`[${Date.now()}] ${req.method} ${req.path} ${err.status} ${err.message}`)
   next(err)
 })
 
@@ -68,7 +81,3 @@ var server = app.listen(app.get('port'), function() {
 
 // prevent too long threshold
 server.timeout = 2048
-
-// MQTT Sub
-const MqttClient = require('./mqtt-client/client')
-MqttClient()

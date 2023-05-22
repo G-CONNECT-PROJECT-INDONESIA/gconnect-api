@@ -1,0 +1,495 @@
+{
+	"info": {
+		"_postman_id": "32f4ccec-233a-4eff-ad68-2bf5c917d109",
+		"name": "GConnect API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19030438"
+	},
+	"item": [
+		{
+			"name": "Add Sensor Node",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test",
+							"pm.test('status code should be 201', () => {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test('response header Content-Type should be application/json', () => {",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.equals('application/json; charset=utf-8');",
+							"});",
+							"",
+							"pm.test('response body should be an object', () => {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson).to.be.an('object');",
+							"});",
+							"",
+							"pm.test('response body should have correct property and value', () => {",
+							"    const responseJson = pm.response.json();",
+							"    ",
+							"    pm.expect(responseJson).to.haveOwnProperty('status');",
+							"    pm.expect(responseJson).to.haveOwnProperty('message');",
+							"    pm.expect(responseJson).to.haveOwnProperty('data');",
+							"",
+							"    pm.expect(responseJson.status).to.equals('success');",
+							"    pm.expect(responseJson.data).to.be.an('object');",
+							"});",
+							"",
+							"pm.test('response body data should contain bookId', () => {",
+							"    const responseJson = pm.response.json();",
+							"    const { data } = responseJson;",
+							"",
+							"    pm.expect(data).to.haveOwnProperty('nodeId');",
+							"    pm.expect(data.bookId).to.not.equals('');",
+							"",
+							"    pm.environment.set('nodeId', data.nodeId);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const nodeNames = [",
+							"    \"node1\",",
+							"    \"node2\",",
+							"    \"node3\"",
+							"];",
+							"",
+							"// Location",
+							"const locationNames = [",
+							"  \"Yogyakarta\",",
+							"  \"Wonosobo\",",
+							"  \"Magelang\",",
+							"  \"Solo\",",
+							"  \"Wonosari\",",
+							"  \"Sleman\",",
+							"  \"Kulonprogo\",",
+							"  \"Universitas Gadjah Mada\",",
+							"  \"Bantul\",",
+							"  \"Universitas Negeri Yogyakarta\"",
+							"];",
+							"",
+							"function getRandomNodeName() {",
+							"    const randomIndex = Math.floor(Math.random() * nodeNames.length);",
+							"    return nodeNames[randomIndex];",
+							"}",
+							"",
+							"const randomNodeName = getRandomNodeName();",
+							"pm.environment.set(\"nodeName\", randomNodeName);",
+							"",
+							"function getRandomLocationName() {",
+							"  const randomIndex = Math.floor(Math.random() * locationNames.length);",
+							"  return locationNames[randomIndex];",
+							"}",
+							"",
+							"// Generate a random location name",
+							"const randomLocationName = getRandomLocationName();",
+							"",
+							"pm.environment.set(\"location\", randomLocationName);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nodeName\": {{nodeName}},\n    \"location\": {{location}},\n    \"latitude\": {{$randomLatitude}},\n    \"longitude\": {{$randomLongitude}},\n    \"description\": {{$randomLoremSentence}}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:{{port}}/{{version}}/sensornode",
+					"host": [
+						"localhost"
+					],
+					"port": "{{port}}",
+					"path": [
+						"{{version}}",
+						"sensornode"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Sensor Data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test",
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);",
+							"});",
+							"",
+							"pm.test('Response header Content-Type should be application/json', () => {",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.equals('application/json; charset=utf-8');",
+							"});",
+							"",
+							"pm.test('Response body should be an object', () => {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson).to.be.an('object');",
+							"});",
+							"",
+							"pm.test('Response body should have correct property and value', () => {",
+							"    const responseJson = pm.response.json();",
+							"    ",
+							"    pm.expect(responseJson).to.haveOwnProperty('status');",
+							"    pm.expect(responseJson).to.haveOwnProperty('message');",
+							"    pm.expect(responseJson).to.haveOwnProperty('data');",
+							"",
+							"    pm.expect(responseJson.status).to.equals('success');",
+							"    pm.expect(responseJson.data).to.be.an('object');",
+							"});",
+							"",
+							"pm.test('response body data should contain bookId', () => {",
+							"    const responseJson = pm.response.json();",
+							"    const { data } = responseJson;",
+							"",
+							"    pm.expect(data).to.haveOwnProperty('dataId');",
+							"    pm.expect(data.bookId).to.not.equals('');",
+							"",
+							"    pm.environment.set('dataId', data.dataId);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function generateRandomValue(min, max) {",
+							"  return Math.random() * (max - min) + min;",
+							"}",
+							"",
+							"function generateRandomTemperature() {",
+							"  return generateRandomValue(-10, 40); // Range: -10°C to 40°C",
+							"}",
+							"",
+							"function generateRandomHumidity() {",
+							"  return generateRandomValue(0, 100); // Range: 0% to 100%",
+							"}",
+							"",
+							"function generateRandomWindSpeed() {",
+							"  return generateRandomValue(0, 50); // Range: 0 km/h to 50 km/h",
+							"}",
+							"",
+							"function generateRandomRainfall() {",
+							"  return generateRandomValue(0, 20); // Range: 0 mm to 20 mm",
+							"}",
+							"",
+							"// Generate random values",
+							"var temperature = generateRandomTemperature();",
+							"var humidity = generateRandomHumidity();",
+							"var windSpeed = generateRandomWindSpeed();",
+							"var rainfall = generateRandomRainfall();",
+							"",
+							"// set to variable",
+							"pm.environment.set('temperature', temperature);",
+							"pm.environment.set('humidity', humidity);",
+							"pm.environment.set('windSpeed', windSpeed);",
+							"pm.environment.set('rainfall', rainfall);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nodeId\": {{nodeId}},\n    \"temperature\": {{temperature}},\n    \"humidity\": {{humidity}},\n    \"windspeed\": {{windSpeed}},\n    \"rainfall\": {{rainfall}},\n    \"latitude\": {{$randomLatitude}},\n    \"longitude\": {{$randomLongitude}},\n    \"imuRoll\": {{imuRoll}},\n    \"imuPitch\": {{imuPitch}},\n    \"batteryStatus\": {{batteryStatus}},\n    \"dangerStatus\": {{dangerStatus}}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:{{port}}/{{version}}/sensordata",
+					"host": [
+						"localhost"
+					],
+					"port": "{{port}}",
+					"path": [
+						"{{version}}",
+						"sensordata"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Sensor Node",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('status code should be 200', () => {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test('response header Content-Type should be application/json', () => {",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.equals('application/json; charset=utf-8');",
+							"});",
+							"",
+							"pm.test('response body should be an object', () => {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson).to.be.an('object');",
+							"});",
+							"",
+							"pm.test('response body object should have correct property and value', () => {",
+							"    const responsJson = pm.response.json();",
+							"",
+							"    pm.expect(responsJson).to.haveOwnProperty('status');",
+							"    pm.expect(responsJson).to.haveOwnProperty('data');",
+							"",
+							"    pm.expect(responsJson.status).to.equals('success');",
+							"    pm.expect(responsJson.data).to.be.an('object');",
+							"});",
+							"",
+							"pm.test('response body data object should have a array books and contains two items', () => {",
+							"    const responseJson = pm.response.json();",
+							"    const { data } = responseJson;",
+							"",
+							"    // pm.expect(data).to.haveOwnProperty('node');",
+							"    // pm.expect(data.books).to.be.an('array');",
+							"    // pm.expect(data.books).to.lengthOf(2);",
+							"});",
+							"",
+							"// pm.test('the books should have contains only id, name, and publisher property', () => {",
+							"//     const responseJson = pm.response.json();",
+							"//     const { data: { books } } = responseJson;",
+							"",
+							"//     books.forEach((book) => {",
+							"//         pm.expect(Object.keys(book)).to.lengthOf(3);",
+							"//         pm.expect(book).to.haveOwnProperty('id');",
+							"//         pm.expect(book).to.haveOwnProperty('name');",
+							"//         pm.expect(book).to.haveOwnProperty('publisher');",
+							"//     });",
+							"// });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:{{port}}/{{version}}/sensornode",
+					"host": [
+						"localhost"
+					],
+					"port": "{{port}}",
+					"path": [
+						"{{version}}",
+						"sensornode"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Sensor Node Active Status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5001/v0/sensornode?status=active",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"v0",
+						"sensornode"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": "active"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Sensor Node by Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5001/v0/sensornode/kiygjfh",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"v0",
+						"sensornode",
+						"kiygjfh"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Sensor Node by Name",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5001/v0/sensornode/name/nsksks",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"v0",
+						"sensornode",
+						"name",
+						"nsksks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Sensor Node by Id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:5001/v0/sensornode/c0836061-8788-4b52-bdc9-2bf3c6dcbc91",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"v0",
+						"sensornode",
+						"c0836061-8788-4b52-bdc9-2bf3c6dcbc91"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Sensor Data",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5001/v0/sensordata",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"v0",
+						"sensordata"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Sensor Data by Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5001/v0/sensordata/0347bf5d-c34d-4523-b9a1-a66f731062fc",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"v0",
+						"sensordata",
+						"0347bf5d-c34d-4523-b9a1-a66f731062fc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Sensor Data by Node Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5001/v0/sensordata/node/dbaf32d9-1062-4080-b201-e416cfc974da",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"v0",
+						"sensordata",
+						"node",
+						"dbaf32d9-1062-4080-b201-e416cfc974da"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "localhost",
+			"type": "string"
+		},
+		{
+			"key": "port",
+			"value": "5001",
+			"type": "string"
+		},
+		{
+			"key": "version",
+			"value": "v0",
+			"type": "string"
+		}
+	]
+}
