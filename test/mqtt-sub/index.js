@@ -32,19 +32,5 @@ client.on('close', () => {
 
 client.on('message', (topic, message) => {
     console.log('Topic: ' + topic);
-    // console.log('Message received: ' + message.toString());
-
-    // get node id from http://localhost:5001/v0/sensornode/name/node1 and print it
-    const getNodeId = async (message) => {
-        await fetch(`http://localhost:5001/v0/sensornode/name/${message.nodeName}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        })
-
-        return await response.json();
-    }
-
-    
+    console.log('Message received: ' + message.toString());
 });

@@ -8,9 +8,9 @@ const sendRespone = async (sensorNodes, req, res) => {
     respone = {
         status: 'success',
         message: 'Sensor nodes retrieved successfully',
-        data: sensorNodes.map(sensorNode => {
-            return sensorNode.dataValues
-        })
+        data: {
+            sensorNodes: sensorNodes
+        }
     }
     console.log(`[${Date.now()}] ${req.method} ${req.originalUrl} ${JSON.stringify(respone)}`)
     res.status(200)
@@ -23,20 +23,22 @@ const sendRespone = async (sensorNodes, req, res) => {
 exports.getAllSensorNodes = async (req, res, next) => {
     const status = req.query.status
     
-    if (status) {
-        await SensorNode.findAll({
-            where: {
-                status: status
-            }
-        }).then(sensorNodes => {
+    if (status === undefined) {
+        await SensorNode.findAll().then(sensorNodes => {
             sendRespone(sensorNodes, req, res)
             return
         }).catch((err) => {
             console.log("Error: " + err.message)
             next(err)
         })
-    } else {
-        await SensorNode.findAll().then(sensorNodes => {
+    }
+
+    if (status === 'active' || status === 'inactive'){
+        await SensorNode.findAll({
+            where: {
+                status: status
+            }
+        }).then(sensorNodes => {
             sendRespone(sensorNodes, req, res)
             return
         }).catch((err) => {
@@ -123,23 +125,44 @@ exports.createSensorNode = async (req, res, next) => {
         updatedAt: Date.now(),
     }
 
-    await SensorNode.create(data).then(sensorNode => {
-        // Create sensor node successfully
-        respone = {
-            status: 'success',
-            message: 'Sensor node created successfully',
-            data: sensorNode
+    // Check if sensor node name exists
+    await SensorNode.findOne({
+        where: {
+            nodeName: nodeName
         }
-        console.error(`[${Date.now()}] ${req.method} ${req.originalUrl} ${response}`)
-        res.status(201)
-            .header('Content-Type', 'application/json')
-            .header('charset', 'utf-8')
-            .json(respone)
-        
+    }).then(sensorNode => {
+        if (sensorNode) {
+            respone = {
+                status: 'conflict',
+                message: 'Sensor node name already exists',
+                nodeName: nodeName
+            }
+            console.log(`[${Date.now()}] ${req.method} ${req.originalUrl} ${JSON.stringify(respone)}`)
+            res.status(409)
+                .header('Content-Type', 'application/json')
+                .header('charset', 'utf-8')
+                .json(respone)
+            return
+        }
+
+        // Create new sensor node if not exists
+        SensorNode.create(data).then(sensorNode => {
+            respone = {
+                status: 'success',
+                message: 'Sensor node created successfully',
+                nodeId: sensorNode.nodeId,
+                data: sensorNode
+            }
+            console.log(`[${Date.now()}] ${req.method} ${req.originalUrl} ${JSON.stringify(respone)}`)
+            res.status(201)
+                .header('Content-Type', 'application/json')
+                .header('charset', 'utf-8')
+                .json(respone)
+        })
     }).catch((err) => {
-        // Error while creating sensor node
-        console.error(`[${Date.now()}] ${req.method} ${req.originalUrl} ${err.message}`)
-        next(err)
+        console.log("Error: " + err.message)
+        console.log(`[${Date.now()}] ${req.method} ${req.originalUrl} ${JSON.stringify(respone)}`)
+        return
     })
 }
 

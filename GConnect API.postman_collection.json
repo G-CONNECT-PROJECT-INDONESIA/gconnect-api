@@ -35,10 +35,11 @@
 							"    pm.expect(responseJson).to.haveOwnProperty('data');",
 							"",
 							"    pm.expect(responseJson.status).to.equals('success');",
+							"    pm.expect(responseJson.message).to.equals('Sensor node created successfully');",
 							"    pm.expect(responseJson.data).to.be.an('object');",
 							"});",
 							"",
-							"pm.test('response body data should contain bookId', () => {",
+							"pm.test('response body data should contain nodeId', () => {",
 							"    const responseJson = pm.response.json();",
 							"    const { data } = responseJson;",
 							"",
@@ -81,7 +82,7 @@
 							"}",
 							"",
 							"const randomNodeName = getRandomNodeName();",
-							"pm.environment.set(\"nodeName\", randomNodeName);",
+							"pm.collectionVariables.set(\"nodeName\", randomNodeName);",
 							"",
 							"function getRandomLocationName() {",
 							"  const randomIndex = Math.floor(Math.random() * locationNames.length);",
@@ -91,7 +92,7 @@
 							"// Generate a random location name",
 							"const randomLocationName = getRandomLocationName();",
 							"",
-							"pm.environment.set(\"location\", randomLocationName);",
+							"pm.collectionVariables.set(\"location\", randomLocationName);",
 							""
 						],
 						"type": "text/javascript"
@@ -103,7 +104,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"nodeName\": {{nodeName}},\n    \"location\": {{location}},\n    \"latitude\": {{$randomLatitude}},\n    \"longitude\": {{$randomLongitude}},\n    \"description\": {{$randomLoremSentence}}\n}",
+					"raw": "{\n    \"nodeName\": \"{{nodeName}}\",\n    \"location\": \"{{location}}\",\n    \"latitude\": {{$randomLatitude}},\n    \"longitude\": {{$randomLongitude}},\n    \"description\": \"{{$randomLoremSentence}}\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -111,9 +112,9 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:{{port}}/{{version}}/sensornode",
+					"raw": "{{host}}:{{port}}/{{version}}/sensornode",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
 					"port": "{{port}}",
 					"path": [
@@ -223,9 +224,9 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:{{port}}/{{version}}/sensordata",
+					"raw": "{{host}}:{{port}}/{{version}}/sensordata",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
 					"port": "{{port}}",
 					"path": [
@@ -264,28 +265,7 @@
 							"",
 							"    pm.expect(responsJson.status).to.equals('success');",
 							"    pm.expect(responsJson.data).to.be.an('object');",
-							"});",
-							"",
-							"pm.test('response body data object should have a array books and contains two items', () => {",
-							"    const responseJson = pm.response.json();",
-							"    const { data } = responseJson;",
-							"",
-							"    // pm.expect(data).to.haveOwnProperty('node');",
-							"    // pm.expect(data.books).to.be.an('array');",
-							"    // pm.expect(data.books).to.lengthOf(2);",
-							"});",
-							"",
-							"// pm.test('the books should have contains only id, name, and publisher property', () => {",
-							"//     const responseJson = pm.response.json();",
-							"//     const { data: { books } } = responseJson;",
-							"",
-							"//     books.forEach((book) => {",
-							"//         pm.expect(Object.keys(book)).to.lengthOf(3);",
-							"//         pm.expect(book).to.haveOwnProperty('id');",
-							"//         pm.expect(book).to.haveOwnProperty('name');",
-							"//         pm.expect(book).to.haveOwnProperty('publisher');",
-							"//     });",
-							"// });"
+							"});"
 						],
 						"type": "text/javascript"
 					}
@@ -295,9 +275,9 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:{{port}}/{{version}}/sensornode",
+					"raw": "{{host}}:{{port}}/{{version}}/sensornode",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
 					"port": "{{port}}",
 					"path": [
@@ -489,6 +469,16 @@
 		{
 			"key": "version",
 			"value": "v0",
+			"type": "string"
+		},
+		{
+			"key": "nodeName",
+			"value": "node1",
+			"type": "string"
+		},
+		{
+			"key": "location",
+			"value": "Yogyakarta",
 			"type": "string"
 		}
 	]

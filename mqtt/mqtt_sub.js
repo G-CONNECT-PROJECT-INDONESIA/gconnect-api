@@ -1,15 +1,24 @@
 const mqttClient = () => {
   const mqtt = require('mqtt')
+  const db = require('../config/db.config')
+  const SensorNode = db.sensornode
 
-  const SERVER = 'localhost'
-  const SERVER_URL = `mqtt://${SERVER}`
-  const PORT = 1883;
+  // GConnect server configuration
+  const GCONNECT_SERVER = 'localhost'
+  const GCONNECT_PORT = 5001;
+  const GCONNECT_URL = `http://${GCONNECT_SERVER}:${GCONNECT_PORT}`
+  
+
+  // MQTT server configuration
+  const MQTT_SERVER = 'localhost'
+  const MQTT_URL = `mqtt://${MQTT_SERVER}`
+  const MQTT_PORT = 1883;
   const TOPIC = 'gconnect-sensor';
 
-  const client = mqtt.connect(SERVER_URL, { port: PORT });
+  const client = mqtt.connect(MQTT_URL, { port: MQTT_PORT });
 
   client.on('connect', () => {
-    console.log('Connected to MQTT server: ' + SERVER_URL + ':' + PORT + '');
+    console.log('Connected to MQTT server: ' + MQTT_URL + ':' + MQTT_PORT + '');
 
     client.subscribe(TOPIC, (err) => {
       if (err) {
@@ -31,41 +40,53 @@ const mqttClient = () => {
     console.log("Connection closed")
   });
 
-  client.on('message', (topic, message) => {
+  client.on('message', async (topic, message) => {
     console.log('Topic: ' + topic)
-    console.log('Message received: ' + message.toString())
-    
-    fetch('http://localhost:5001/v0/sensordata', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-    }).then((response) => {
-      if (response.ok) {
-        console.log(`[${Date.now()}] MQTT client message sent to API`)
-      } else {
-        console.log(`[${Date.now()}] MQTT client message not sent to API`)
+    console.log('Message received: ')
+    const data = JSON.parse(message.toString())
+    console.log(data)
+
+    SensorNode.findOne({
+      where: {
+        nodeName: data.nodeName
       }
-    }).catch((err) => {
-      console.log('MQTT client message not sent to API: ' + err.message)
+    }).then(sensorNode => {
+      if (!sensorNode) {
+        console.log('Sensor node not found')
+        return
+      }
+
+      fetch(`${GCONNECT_URL}/v0/sensordata`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          nodeId: sensorNode.nodeId,
+          temperature: data.temperature,
+          humidity: data.humidity,
+          windspeed: data.windspeed,
+          rainfall: data.rainfall,
+          latitude: data.latitude,
+          longitude: data.longitude,
+          imuRoll: data.imuRoll,
+          imuPitch: data.imuPitch,
+          batteryStatus: data.batteryStatus,
+          dangerStatus: data.dangerStatus
+        })
+      }).then(res => {
+        console.log('Response from GConnect server: ' + res.status)
+        console.log('Sensor data created')
+      }).catch(err => {
+        console.log('Error while creating sensor data: ' + err.message)
+      })
+
+      return
+    }).catch(err => {
+      console.log('Error while finding sensor node: ' + err.message)
     })
+    
   })
 }
 
 module.exports = mqttClient
-
-// fetch('http://localhost:3000/v0/sensordata', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: message.toString()
-    // }).then((response) => {
-    //   if (response.ok) {
-    //     console.log('MQTT client message sent to API')
-    //   } else {
-    //     console.log('MQTT client message not sent to API')
-    //   }
-    // }).catch((err) => {
-    //   console.log('MQTT client message not sent to API: ' + err.message)
-    // })
