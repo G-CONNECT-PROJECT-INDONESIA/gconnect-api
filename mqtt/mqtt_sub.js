@@ -1,18 +1,18 @@
-const mqttClient = () => {
+const mqttClient = async () => {
   const mqtt = require('mqtt')
   const db = require('../config/db.config')
   const SensorNode = db.sensornode
 
   // GConnect server configuration
-  const GCONNECT_SERVER = 'localhost'
-  const GCONNECT_PORT = 5001;
+  const GCONNECT_SERVER = 'localhost'  // change for production
+  const GCONNECT_PORT = 5001;           // change for production
   const GCONNECT_URL = `http://${GCONNECT_SERVER}:${GCONNECT_PORT}`
   
 
   // MQTT server configuration
-  const MQTT_SERVER = 'localhost'
+  const MQTT_SERVER = 'localhost'           // change for production
   const MQTT_URL = `mqtt://${MQTT_SERVER}`
-  const MQTT_PORT = 1883;
+  const MQTT_PORT = 1883;                   // change for production
   const TOPIC = 'gconnect-sensor';
 
   const client = mqtt.connect(MQTT_URL, { port: MQTT_PORT });
@@ -75,7 +75,7 @@ const mqttClient = () => {
           dangerStatus: data.dangerStatus
         })
       }).then(res => {
-        console.log('Response from GConnect server: ' + res.status)
+        console.log('Response from GConnect server: ' + json.stringify(res))
         console.log('Sensor data created')
       }).catch(err => {
         console.log('Error while creating sensor data: ' + err.message)

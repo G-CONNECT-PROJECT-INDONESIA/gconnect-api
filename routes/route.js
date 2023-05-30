@@ -1,5 +1,4 @@
 const express   = require('express')
-const { route } = require('./sensornode.route')
 const router         = express.Router()
 require("dotenv").config()
 

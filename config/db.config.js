@@ -1,7 +1,7 @@
 require('dotenv').config()
 
-const Sequlize = require('sequelize')
-const sequelize = new Sequlize(
+const Sequelize = require('sequelize')
+const sequelize = new Sequelize(
   process.env.MYSQL_DB_NAME, 
   process.env.MYSQL_USERNAME, 
   process.env.MYSQL_PASSWORD, 
@@ -21,12 +21,12 @@ const sequelize = new Sequlize(
 
 const db = {}
 
-db.Sequlize = Sequlize
+db.Sequelize = Sequelize
 db.sequelize = sequelize
 
 // Models/tables
-db.sensornode = require('../models/sensornode.model')(sequelize, Sequlize)
-db.sensordata = require('../models/sensordata.model')(sequelize, Sequlize)
+db.sensornode = require('../models/sensornode.model')(sequelize, Sequelize)
+db.sensordata = require('../models/sensordata.model')(sequelize, Sequelize)
 
 module.exports = db
 

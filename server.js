@@ -26,7 +26,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 // MQTT client
 const mqttClient = require('./mqtt/mqtt_sub')
-mqttClient()
+app.use(mqttClient)
 
 // Port
 const port = process.env.PORT || 5000
