@@ -16,16 +16,16 @@ $ touch .env
 3. Copy and paste this code to .env file
 
 ```
-MYSQL_DB_NAME=gconnect_db
-MYSQL_USERNAME=root
-MYSQL_PASSWORD="yourpassword"
+MYSQL_DB_NAME=db_name # ganti sesuai nama database yang mau dipake 
+MYSQL_USERNAME=root # ganti sesuai username mysql
+MYSQL_PASSWORD="your_password" # terserah mau pake password apa
 MYSQL_DIALECT=mysql
 MYSQL_POOL_MAX=5
 MYSQL_POOL_MIN=0
 MYSQL_POOL_ACQUIRE=30000
 MYSQL_POOL_IDLE=10000
 PORT=5001
-ENVIROMENT=production
+ENVIROMENT=development
 PRODUCT_NAME="Gconnect API"
 API_VERSION=v1
 ```
@@ -84,18 +84,18 @@ $ docker run -p 5001:5001 gconnect-api
 ### Sensor Data
 | Method | Endpoint | Description | Example |
 | --- | --- | --- | --- |
-| GET | /v0/sensordata | Get all sensor data | [https://gconnect-api.herokuapp.com/v0/sensordata](https://gconnect-api.herokuapp.com/v0/sensordata) |
-| GET | v0/sensordata?date_l&data_r= | Get all sensor data in specific range of date | 
-| GET | /v0/sensordata/:id | Get sensor data by id | [https://gconnect-api.herokuapp.com/v0/sensordata/5f9b7b4b1c9d440000b7b4a0](https://gconnect-api.herokuapp.com/v0/sensordata/5f9b7b4b1c9d440000b7b4a0) |
-| POST | /v0/sensordata | Create new sensor data | [https://gconnect-api.herokuapp.com/v0/sensordata](https://gconnect-api.herokuapp.com/v0/sensordata) |
-| PUT | /v0/sensordata/:id | Update sensor data by id | [https://gconnect-api.herokuapp.com/v0/sensordata/5f9b7b4b1c9d440000b7b4a0](https://gconnect-api.herokuapp.com/v0/sensordata/5f9b7b4b1c9d440000b7b4a0) |
-| DELETE | /v0/sensordata/:id | Delete sensor data by id | [https://gconnect-api.herokuapp.com/v0/sensordata/5f9b7b4b1c9d440000b7b4a0](https://gconnect-api.herokuapp.com/v0/sensordata/5f9b7b4b1c9d440000b7b4a0) |
+| GET | /v0/sensordata | Get all sensor data | [https://localhost:5001/v0/sensordata](https://localhost:5001/v0/sensordata) |
+| GET | v0/sensordata?date_l&data_r= | Get all sensor data in specific range of date | (masih belum ada)
+| GET | /v0/sensordata/:id | Get sensor data by id | [https://localhost:5001/v0/sensordata/5f9b7b4b1c9d440000b7b4a0](https://localhost:5001/v0/sensordata/5f9b7b4b1c9d440000b7b4a0) |
+| POST | /v0/sensordata | Create new sensor data | [https://localhost:5001/v0/sensordata](https://localhost:5001/v0/sensordata) |
+| PUT | /v0/sensordata/:id | Update sensor data by id | [https://localhost:5001/v0/sensordata/5f9b7b4b1c9d440000b7b4a0](https://localhost:5001/v0/sensordata/5f9b7b4b1c9d440000b7b4a0) |
+| DELETE | /v0/sensordata/:id | Delete sensor data by id | [https://localhost:5001/v0/sensordata/5f9b7b4b1c9d440000b7b4a0](https://localhost:5001/v0/sensordata/5f9b7b4b1c9d440000b7b4a0) |
 
 ### Sensor Node
 | Method | Endpoint | Description | Example |
 | --- | --- | --- | --- |
-| GET | /v0/sensornode | Get all sensor node | [https://gconnect-api.herokuapp.com/v0/sensornode](https://gconnect-api.herokuapp.com/v0/sensornode) |
-| GET | /v0/sensornode/:id | Get sensor node by id | [https://gconnect-api.herokuapp.com/v0/sensornode/5f9b7b4b1c9d440000b7b4a0](https://gconnect-api.herokuapp.com/v0/node/5f9b7b4b1c9d440000b7b4a0) |
-| POST | /v0/sensornode | Create new sensor node | [https://gconnect-api.herokuapp.com/v0/sensornode](https://gconnect-api.herokuapp.com/v0/node) |
-| PUT | /v0/sensornode/:id | Update sensor node by id | [https://gconnect-api.herokuapp.com/v0/sensornode/5f9b7b4b1c9d440000b7b4a0](https://gconnect-api.herokuapp.com/v0/node/5f9b7b4b1c9d440000b7b4a0) |
-| DELETE | /v0/sensornode/:id | Delete sensor node by id | [https://gconnect-api.herokuapp.com/v0/sensornode/5f9b7b4b1c9d440000b7b4a0](https://gconnect-api.herokuapp.com/v0/sensornode/5f9b7b4b1c9d440000b7b4a0) |
+| GET | /v0/sensornode | Get all sensor node | [https://localhost:5001/v0/sensornode](https://localhost:5001/v0/sensornode) |
+| GET | /v0/sensornode/:id | Get sensor node by id | [https://localhost:5001/v0/sensornode/5f9b7b4b1c9d440000b7b4a0](https://localhost:5001/v0/node/5f9b7b4b1c9d440000b7b4a0) |
+| POST | /v0/sensornode | Create new sensor node | [https://localhost:5001/v0/sensornode](https://localhost:5001/v0/node) |
+| PUT | /v0/sensornode/:id | Update sensor node by id | [https://localhost:5001/v0/sensornode/5f9b7b4b1c9d440000b7b4a0](https://localhost:5001/v0/node/5f9b7b4b1c9d440000b7b4a0) |
+| DELETE | /v0/sensornode/:id | Delete sensor node by id | [https://localhost:5001/v0/sensornode/5f9b7b4b1c9d440000b7b4a0](https://localhost:5001/v0/sensornode/5f9b7b4b1c9d440000b7b4a0) |
