@@ -1,15 +1,20 @@
 module.exports = (sequelize, DataTypes) => {
   const Gateway = sequelize.define('Gateway', {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
     gatewayName: {
       type: DataTypes.STRING,
       allowNull: false,
       primaryKey: true,
       unique: true,
     },
-    nodeList: {
-      type: DataTypes.INTEGER,
+    nodeList: { // array of node
+      type: DataTypes.JSON,
       allowNull: false,
-      unique: true,
+      defaultValue: [],
     },
     location: DataTypes.STRING,
     latitude: {

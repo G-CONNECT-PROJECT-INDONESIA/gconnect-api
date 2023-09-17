@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const db = require('./config/db.config');
 const routes = require('./routes/route');
 
+require('dotenv').config();
+
 // Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -14,23 +16,15 @@ db.sequelize.sync({ force: false }).then(() => {
 });
 
 // Routes
-app.use('/api', routes);
+const apiVersion = process.env.API_VERSION;
+app.use('/api/' + apiVersion, routes);
 
 // MQTT data handling - Include mqtt_sub.js here as an object
 const mqttClient = require('./mqtt/mqtt_sub');
-
-mqttClient.onConnect = () => {
-  console.log('Connected to MQTT server');
-  mqttClient.subscribe('gconnect-sensor');
-};
-
-mqttClient.onMessage = (topic, message) => {
-  console.log('Received message from MQTT:', topic, message.toString());
-  // Process and store the MQTT data as needed
-};
+mqttClient();
 
 const PORT = process.env.PORT || 8000;
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on http://localhost:` + PORT);
 });

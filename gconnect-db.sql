@@ -1,4 +1,4 @@
--- CREATE DATABASE gconnect_db;
+CREATE DATABASE gconnect_db;
 
 -- USE the database
 USE gconnect_db;
