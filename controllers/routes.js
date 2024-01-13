@@ -15,6 +15,7 @@ router.get("/nodes/:id", nodeController.getNodeById);
 router.put("/nodes/:id", nodeController.updateNodebyId);
 router.delete("/nodes/:id", nodeController.deleteNodebyId);
 router.get("/nodes/nodeId/:node_id", nodeController.getNodebyNodeId);
+router.get("/node", nodeController.getNodesNew);
 // router.get("/nodes/nodeId/:node_id/:from/:hours", nodeController.getNodebyNodeIdTime)
 // router.get('/nodes/:nodeId/data', nodeController.getNodeData);
 

@@ -197,3 +197,23 @@ exports.getNodebyNodeIdTime = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+exports.getNodesNew = async (req, res) => {
+  try {
+    const mostRecentData = await Node.findOne({
+      order: [['updatedAt', 'DESC']],
+    });
+
+    if (mostRecentData) {
+        const response = {
+            mostRecentData
+        };
+      console.log('Most recent data:', mostRecentData.toJSON());
+      res.status(200).json(mostRecentData);
+    } else {
+      console.log('No data found.');
+    }
+  } catch (error) {
+    console.error('Error fetching data:', error.message);
+  }
+}
